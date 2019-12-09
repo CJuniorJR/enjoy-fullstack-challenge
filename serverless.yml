@@ -19,8 +19,12 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE}"
 
 functions:
-  hello:
-    handler: handler.hello
+  setParticipation:
+    handler: src/setParticipation
+    events:
+    - http:
+        path: /participation
+        method: post
 
 resources:
   Resources:
