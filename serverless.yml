@@ -4,8 +4,8 @@ provider:
   name: aws
   runtime: nodejs12.x
   environment:
-    TABLE: users
-  region: sa-eat-1
+    TABLE: participations
+  region: sa-east-1
   iamRoleStatements:
     - Effect: Allow
       Action: 
@@ -20,11 +20,11 @@ provider:
 
 functions:
   setParticipation:
-    handler: src/setParticipation
+    handler: build/setParticipation.handler
     events:
     - http:
         path: /participation
-        method: post
+        method: get
 
 resources:
   Resources:

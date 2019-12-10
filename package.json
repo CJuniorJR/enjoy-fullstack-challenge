@@ -1,13 +1,19 @@
 {
-  "dependencies": {
-    "@types/aws-lambda": "^8.10.37",
-    "@types/node": "^12.12.16",
-    "uuid": "^3.3.3"
-  },
   "name": "enjoy-challenge-backend",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/CJuniorJR/enjoy-fullstack-challenge.git",
   "author": "Claudio Junior <claudiodsesjunior@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "yarn build && sls deploy"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.37",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/node": "^12.12.16",
+    "@types/uuid": "^3.4.6",
+    "uuid": "^3.3.3"
+  }
 }

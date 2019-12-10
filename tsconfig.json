@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2017",
+        "target": "es6",
         "module": "commonjs",
         "outDir": "./build",
         "strict": true,
@@ -13,5 +13,6 @@
         ],
         "esModuleInterop": true,
         "inlineSourceMap": true
-    }
+    },
+    "exclude": [ "node_modules", "build" ]
 }
