@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   environment:
-    TABLE: participations
+    TABLE: projects
   region: sa-east-1
   iamRoleStatements:
     - Effect: Allow
@@ -19,12 +19,18 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE}"
 
 functions:
+  createProject:
+    handler: build/createProject.handler
+    events:
+    - http:
+        path: /project
+        method: post
   setParticipation:
     handler: build/setParticipation.handler
     events:
     - http:
-        path: /participation
-        method: get
+        path: /project/{id}/set_participation
+        method: put
 
 resources:
   Resources:
