@@ -1,6 +1,5 @@
-import { Handler, Context, Callback } from 'aws-lambda'
+import { Context, Callback } from 'aws-lambda'
 import IResponse from './IResponse';
-import uuid from 'uuid/v4'
 import AWS from 'aws-sdk'
 
 const db = new AWS.DynamoDB.DocumentClient()
@@ -9,10 +8,49 @@ function response(statusCode: number, body: any): IResponse {
     return { statusCode, body }
 }
 
-module.exports.handler = (event: any, context: Context, callback: Callback) => {
-    const reqBody = JSON.parse(event.body)
+function getProject(id: string) {
+    const params = {
+        Key: {
+            id
+        },
+        TableName: 'project'
+    }
 
-    if(!reqBody.name.first || reqBody.name.fisrt.trim() === '' || !reqBody.name.last || reqBody.name.last.trim() === '') {
+    return db.get(params).promise().then(res => {
+        if(res.Item) {
+            return { data: res.Item, error: { statusCode: null, message: null } }
+        } else {
+            return { data: null, error: { statusCode: 404, message: 'Project not found' } }
+        }
+    }).catch(err => { 
+        return { 
+            data: null, 
+            error: { statusCode: err.statusCode, message: err }
+        }
+    })
+}
+
+function updateParams(id: string, paramName: string, paramValue: any) {
+    return {
+        Key: {
+          id: id
+        },
+        TableName: 'project',
+        ConditionExpression: 'attribute_exists(id)',
+        UpdateExpression: 'set ' + paramName + ' = :v',
+        ExpressionAttributeValues: {
+          ':v': paramValue
+        },
+        ReturnValue: 'ALL_NEW'
+    }
+}
+
+module.exports.handler = async (event: any, context: Context, callback: Callback) => {
+    const reqBody = JSON.parse(event.body)
+    const id = event.pathParameters.id
+    let newPercentage = null;
+
+    if(!reqBody.name.first || reqBody.name.first.trim() === '' || !reqBody.name.last || reqBody.name.last.trim() === '') {
         return callback(null, response(400, 'Post must have a first and a last name and they must be not empty.'))
     }
 
@@ -20,17 +58,25 @@ module.exports.handler = (event: any, context: Context, callback: Callback) => {
         return callback(null, response(400, 'Post must have a participation percentage.'))
     }
 
-    const participation = {
-        id: uuid(),
-        name: reqBody.name,
-        participation: reqBody.participation,
-        createdAt: new Date().toISOString()
+    const project = await getProject(id);
+
+    if(project.error) {
+        return callback(null, response(project.error.statusCode, project.error.message))
+    } else if(project.data) {
+        if(reqBody.participation > project.data.percentage) {
+            return callback(null, response(400, 'Participation percentage is exceeding remaining limit'))
+        }
+        newPercentage = project.data.percentage - reqBody.participation
     }
 
-    return db.put({
-        TableName: 'participations',
-        Item: participation
-    }).promise().then(() => {
-        callback(null, response(201, participation))
+    const participation = {
+        name: reqBody.name,
+        participation: reqBody.participation
+    }
+
+    await db.update(updateParams(id, 'percentage', newPercentage)).promise()
+
+    return await db.update(updateParams(id, 'contributors', participation)).promise().then(res => {
+        callback(null, response(200, res.Attributes))
     }).catch(err => callback(null, response(err.statusCode, err)))
 }
