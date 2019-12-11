@@ -20,13 +20,13 @@ provider:
         
 functions:
   createProject:
-    handler: build/createProject.handler
+    handler: build/project/createProject.handler
     events:
     - http:
         path: /project
         method: post
   setParticipation:
-    handler: build/setParticipation.handler
+    handler: build/participation/setParticipation.handler
     events:
     - http:
         path: /project/{id}/set_participation
