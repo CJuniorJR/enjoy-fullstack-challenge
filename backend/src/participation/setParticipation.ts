@@ -46,8 +46,8 @@ module.exports.handler = async (event: any, context: Context, callback: Callback
     const id = event.pathParameters.id
     let newPercentage = null;
 
-    if(!event.name.first || event.name.first.trim() === '' || !event.name.last || event.name.last.trim() === '') {
-        return callback(null, Response(400, 'Post must have a first and a last name and they must be not empty.'))
+    if(!event.name || event.name.trim() === '' || !event.name|| event.name.trim() === '') {
+        return callback(null, Response(400, 'Post must have a name and it must be not empty.'))
     }
 
     if(!event.percentage) {
