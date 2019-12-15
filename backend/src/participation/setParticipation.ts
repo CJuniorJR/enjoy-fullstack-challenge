@@ -8,14 +8,14 @@ import { getProject } from '../project/getProject'
 
 import Response from '../Response'
 
-function updatePercentage(id: string, paramName: string, paramValue: any) {
+export function updatePercentage(id: string, paramValue: any) {
     return {
         Key: {
           id: id
         },
         TableName: 'projects',
         ConditionExpression: 'attribute_exists(id)',
-        UpdateExpression: 'set ' + paramName + ' = :v',
+        UpdateExpression: 'set percentage = :v',
         ExpressionAttributeValues: {
           ':v': paramValue
         },
@@ -43,7 +43,7 @@ function updateContributors(id: string, paramValue: any) {
 }
 
 module.exports.handler = async (event: any, context: Context, callback: Callback) => {
-    const id = event.pathParameters.id
+    const id = event.pathParameters.projectId
     let newPercentage = null;
 
     if(!event.name || event.name.trim() === '' || !event.name|| event.name.trim() === '') {
@@ -79,7 +79,7 @@ module.exports.handler = async (event: any, context: Context, callback: Callback
         participationPercentage: event.percentage
     }
 
-    await db.update(updatePercentage(id, 'percentage', newPercentage)).promise()
+    await db.update(updatePercentage(id, newPercentage)).promise()
 
     return await db.update(updateContributors(id, contributor)).promise().then(res => {
         callback(null, Response(200, res.Attributes))

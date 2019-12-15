@@ -23,7 +23,7 @@ functions:
     handler: build/project/getProject.handler
     events:
     - http:
-        path: /project/{id}
+        path: /project/{projectId}
         method: get
   createProject:
     handler: build/project/createProject.handler
@@ -35,7 +35,13 @@ functions:
     handler: build/participation/setParticipation.handler
     events:
     - http:
-        path: /project/{id}/set_participation
+        path: /project/{projectId}/set_participation
+        method: put
+  deleteParticipation:
+    handler: build/participation/deleteParticipation.handler
+    events:
+    - http:
+        path: /project/{projectId}/delete/{contributorId}
         method: put
 
 resources:
