@@ -1,17 +1,15 @@
 import { Context, Callback } from 'aws-lambda'
-import IResponse from '../IResponse'
+import IResponse from '../Response'
 import uuid from 'uuid/v4'
 import AWS from 'aws-sdk'
 
 const db = new AWS.DynamoDB.DocumentClient()
 
-function response(statusCode: number, message: any): IResponse {
-    return { statusCode: statusCode, message: message }
-}
+import Response from '../Response'
 
 module.exports.handler = (event: any, context: Context, callback: Callback) => {
     if(!event.projectName || event.projectName.trim() === '') {
-        return callback(null, response(400, 'Post must have a project name and it must be not empty.'))
+        return callback(null, Response(400, 'Post must have a project name and it must be not empty.'))
     }
 
     const project = {
@@ -26,6 +24,6 @@ module.exports.handler = (event: any, context: Context, callback: Callback) => {
         TableName: 'projects',
         Item: project
     }).promise().then(() => {
-        return callback(null, response(201, project))
-    }).catch(err => callback(null, response(err.statusCode, err)))
+        return callback(null, Response(201, project))
+    }).catch(err => callback(null, Response(err.statusCode, err)))
 }
