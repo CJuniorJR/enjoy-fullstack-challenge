@@ -30,7 +30,7 @@ export function getProject(id: string) {
 }
 
 module.exports.handler = async (event: any, context: Context, callback: Callback) => {
-    const id = event.pathParameters.id
+    const id = event.pathParameters.projectId
 
     const project = await getProject(id)
 
