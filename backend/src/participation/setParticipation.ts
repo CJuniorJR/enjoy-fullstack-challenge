@@ -43,7 +43,7 @@ function updateContributors(id: string, paramValue: any) {
 }
 
 module.exports.handler = async (event: any, context: Context, callback: Callback) => {
-    const id = event.pathParameters.projectId
+    const id = event.pathParameters.id
     let newPercentage = null;
 
     if(!event.name || event.name.trim() === '' || !event.name|| event.name.trim() === '') {
