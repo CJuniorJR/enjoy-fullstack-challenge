@@ -1,8 +1,8 @@
 interface IResponse {
     statusCode: number;
-    message: any;
+    data: any;
 } 
 
-export default function response(statusCode: number, message: any): IResponse {
-    return { statusCode: statusCode, message: message }
+export default function response(statusCode: number, data: any): IResponse {
+    return { statusCode: statusCode, data: data }
 }

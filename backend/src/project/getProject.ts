@@ -17,7 +17,7 @@ export function getProject(id: string) {
 
     return db.get(params).promise().then(res => {
         if(res.Item) {
-            return { data: res.Item, error: { statusCode: null, message: null } }
+            return { data: res.Item.data, error: { statusCode: null, message: null } }
         } else {
             return { data: null, error: { statusCode: 404, message: 'Project not found' } }
         }
