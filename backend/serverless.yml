@@ -31,6 +31,12 @@ functions:
     - http:
         path: /project
         method: post
+  deleteProject:
+    handler: build/project/deleteProject.handler
+    events:
+    - http:
+        path: /project/{id}
+        method: delete
   setParticipation:
     handler: build/participation/setParticipation.handler
     events:
