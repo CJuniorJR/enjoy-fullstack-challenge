@@ -1,5 +1,4 @@
 import { Context, Callback } from 'aws-lambda'
-import IResponse from '../Response'
 import uuid from 'uuid/v4'
 import AWS from 'aws-sdk'
 

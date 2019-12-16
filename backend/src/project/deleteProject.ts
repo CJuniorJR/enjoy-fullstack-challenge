@@ -1,6 +1,5 @@
 import { Context, Callback } from 'aws-lambda'
 import AWS from 'aws-sdk'
-import uuid from 'uuid/v4'
 
 const db = new AWS.DynamoDB.DocumentClient()
 

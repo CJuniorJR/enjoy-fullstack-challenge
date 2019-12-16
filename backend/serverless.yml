@@ -19,18 +19,24 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TABLE}"
         
 functions:
-  getProject:
-    handler: build/project/getProject.handler
-    events:
-    - http:
-        path: /project/{id}
-        method: get
   createProject:
     handler: build/project/createProject.handler
     events:
     - http:
         path: /project
         method: post
+  getProject:
+    handler: build/project/getProject.handler
+    events:
+    - http:
+        path: /project/{id}
+        method: get
+  getProjects:
+    handler: build/project/getProjects.handler
+    events:
+    - http:
+        path: /projects
+        method: get
   deleteProject:
     handler: build/project/deleteProject.handler
     events:
