@@ -1,7 +1,5 @@
 import { Context, Callback } from 'aws-lambda'
-import IResponse from '../Response';
 import AWS from 'aws-sdk'
-import uuid from 'uuid/v4'
 
 const db = new AWS.DynamoDB.DocumentClient()
 
